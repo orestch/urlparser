@@ -1,0 +1,36 @@
+{
+  "name": "urlparser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js"
+  },
+  "keywords": [],
+  "author": "Orest Chuguievets",
+  "license": "ISC",
+  "dependencies": {
+    "canvas-prebuilt": "^1.6.5-prerelease.1",
+    "express": "^4.15.3",
+    "jsdom": "^11.0.0"
+  },
+  "devDependencies": {
+    "es6-promise": "*",
+    "gulp": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-cache": "*",
+    "gulp-clean-css": "*",
+    "gulp-concat": "*",
+    "gulp-csscomb": "*",
+    "gulp-imagemin": "*",
+    "gulp-merge-media-queries": "*",
+    "gulp-minify-html": "*",
+    "gulp-plumber": "*",
+    "gulp-pug": "*",
+    "gulp-rename": "*",
+    "gulp-sass": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-uglify": "*"
+  }
+}

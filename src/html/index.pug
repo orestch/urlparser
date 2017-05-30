@@ -1,0 +1,17 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    link(rel='stylesheet', href='css/styles.css')
+    title Web workers
+  body
+    .container
+      header.header
+        h1.header__title urlParser.js
+      main.content
+        article.browser
+          .form-group
+            input.browser__address-bar.browser__address-bar-js(type='text', placeholder='Enter your url here...')
+            button.browser__goto-url-btn.browser__goto-url-btn-js(id='type="button"') >
+          .browser__window.browser__window-js
+    script(src='js/main.js')
