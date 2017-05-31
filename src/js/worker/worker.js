@@ -25,9 +25,23 @@
       hostname: parsedUrl[3] || "",
       port: parsedUrl[4] || "",
       pathname: parsedUrl[5] || "",
-      queryParams: paramsObj || "",
-      hash: parsedUrl[9] || ""
+      queryParams: JSON.stringify(paramsObj) || "",
+      hash: parsedUrl[9] || "",
+      type: getUrlType(parsedUrl[0]) || ""
     };
+  }
+
+  function getUrlType(urlString) {
+    var patternAbsolute = /^https?:\/\//i,
+      patternRelative = /^https?:\/\/|^\/\//i;
+
+    if (patternAbsolute.test(urlString)) {
+      return "absolute";
+    } else if (patternRelative.test(urlString)) {
+      return "relative";
+    }
+
+    return null;
   }
 
   this.onmessage = function(e) {

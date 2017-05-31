@@ -10,8 +10,12 @@ html(lang='en')
         h1.header__title urlParser.js
       main.content
         article.browser
-          .form-group
-            input.browser__address-bar.browser__address-bar-js(type='text', placeholder='Enter your url here...')
-            button.browser__goto-url-btn.browser__goto-url-btn-js(id='type="button"') >
-          .browser__window.browser__window-js
+          .input-group
+            input.form-control.browser__address-bar-js(type='text', placeholder='Enter url here...')
+            .input-group-btn
+              button.browser__goto-url-btn.btn.btn-secondary.browser__goto-url-btn-js(id='type="button"') >
+          .browser__window
+            .spinner-wrapper
+              .spinner
+            iframe.browser__window-js(framborder=0, src="")
     script(src='js/main.js')

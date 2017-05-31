@@ -36,11 +36,8 @@ gulp.task('scss',function(){
             this.emit('end');
         }
     }))
-    .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(autoPrefixer())
-    .pipe(cssComb())
-    .pipe(cmq({log:true}))
     .pipe(concat('styles.css'))
     .pipe(gulp.dest('dist/css'))
     .pipe(rename({
@@ -97,5 +94,4 @@ gulp.task('default',function(){
     gulp.watch('src/js/**/*.js',['js']);
     gulp.watch('src/scss/**/*.scss',['scss']);
     gulp.watch('src/html/**/*.pug',['pug']);
-    gulp.watch('src/images/**/*',['image']);
 });
