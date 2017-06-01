@@ -21,12 +21,16 @@
       var xhr = new(XMLHttpRequest || ActiveXObject)('MSXML2.XMLHTTP.3.0');
 
       if ("withCredentials" in xhr){
-          xhr.open("get", url, async);
+          xhr.open(method, url, async);
       } else if (typeof XDomainRequest != "undefined"){
           xhr = new XDomainRequest();
           xhr.open(method, url);
       } else {
           xhr = null;
+      }
+
+      if (method === 'post') {
+        xhr.setRequestHeader('Content-Type', 'text/plain');
       }
 
       xhr.onreadystatechange = function () {
@@ -62,33 +66,41 @@
 
     browserWindow.addEventListener('load', function() {
       if(browserWindow.contentWindow) {
-        var cssLink = document.createElement("link"),links = [];
+        var base = document.createElement("base"),
+          links = [];
 
         spinner.style.display = "none";
 
         links = browserWindow.contentWindow.window.document.getElementsByTagName('a');
 
-        cssLink.rel = "stylesheet";
-        cssLink.type = "text/css";
-        browserWindow.contentWindow.window.document.head.appendChild(cssLink);
+        base.href = response.domain;
 
-        links = [].map.call(links, link => link.href);
+        browserWindow.contentWindow.window.document.head.appendChild(base);
 
-        sendMessageToWorker(links);
+        links = [].map.call(links, link => link.href.indexOf(response.domain) > -1 ? link.href.replace(/^https?:\/\/(([^:\/\\?#]*)(?::([0-9]*))?)?/i, '') : link.href);
+
+        console.log(links);
+
+        sendMessageToWorker({ links: links, domain: response.domain });
       }
     }, false);
   }
 
   function gotoURL(e) {
-    var url = addressBar.value;
+    var url = addressBar.value,
+      pattern = /^(?:https?:\/\/)?(?:[^:\/\\?#0-9]*)?(?:[^:\\?#]*)(\?([^#]*))?(#(.*))?$/i;
 
     if(((e.type === 'click' && e.target.nodeName === 'BUTTON') || (e.type === 'keyup' && e.keyCode == 13)) && url) {
 
-      var request = createXHR(parseLinksUrl + url, "get", sendLinksToWorker, true);
+      if (pattern.test(url)) {
+        var request = createXHR(parseLinksUrl, "post", sendLinksToWorker, true);
 
-      if (request){
-          spinner.style = "display: block";
-          return request.send();
+        if (request){
+            spinner.style = "display: block";
+            return request.send(JSON.stringify({
+              url: url
+            }));
+        }
       }
     }
 
@@ -100,18 +112,18 @@
 
     for(var key in tooltipObj) {
       if (tooltipObj.hasOwnProperty(key) && tooltipObj[key]) {
-        result += key + ": " + tooltipObj[key] + '<br>';
+        result += "<strong>" + key + "</strong>" + ": " + tooltipObj[key] + '<br>';
       }
     }
 
     return result;
   }
 
-
   function addTooltips(e) {
     var parsedUrls = e.data.result;
 
     links = browserWindow.contentWindow.window.document.getElementsByTagName ('a');
+
     links = [].forEach.call(links, link => {
       link.className = 'tooltip';
       link.style = "position: relative; display: inline-block; border-bottom: 1px dotted black; overflow: visible";
@@ -121,7 +133,7 @@
       var tooltiptext = document.createElement("span");
       tooltiptext.className = "tooltiptext";
 
-      tooltiptext.style = "visibility: hidden; background-color: grey; color: #fff; text-align: center; border-radius: 6px; padding: 10px; min-height: 200px; position: absolute; z-index: 100000; word-break: break-all;min-width: 200px"
+      tooltiptext.style = "visibility: hidden; background-color: #eee; color: #424242; font: normal 14px/1.2 Helvetica, sans-serif;  text-align: center; text-transform: lowercase; border-radius: 6px; padding: 10px;  position: absolute; z-index: 100000; word-break: break-all;min-width: 200px"
 
       var tooltip = parsedUrls.find(parsedUrl => parsedUrl.href === linkHref);
 

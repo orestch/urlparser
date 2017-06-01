@@ -11,7 +11,6 @@
   "author": "Orest Chuguievets",
   "license": "ISC",
   "dependencies": {
-    "canvas-prebuilt": "^1.6.5-prerelease.1",
     "express": "^4.15.3",
     "website-scraper": "^2.4.1"
   },

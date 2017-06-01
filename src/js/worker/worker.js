@@ -5,7 +5,7 @@
    */
    function parseUrl(url) {
     var url = url || window.location.href,
-      parsedUrl = url.match(/^([a-z][a-z0-9\+-\.]+):?\/\/(([^:\/\\?#]*)(?::([0-9]*))?)?([^\\?#]*)(\?([^#]*))?(#(.*))?$/i),
+      parsedUrl = url.match(/^(?:([a-z][a-z0-9\+-\.]+):?\/\/)?(([^:\/\\?#]*)(?::([0-9]*))?)?([^\\?#]*)(\?([^#]*))?(#(.*))?$/i),
       params = parsedUrl[6] || null,
       paramsObj = {};
 
@@ -32,12 +32,11 @@
   }
 
   function getUrlType(urlString) {
-    var patternAbsolute = /^https?:\/\//i,
-      patternRelative = /^https?:\/\/|^\/\//i;
+    var patternAbsolute = /^https?:\/\//i;
 
     if (patternAbsolute.test(urlString)) {
       return "absolute";
-    } else if (patternRelative.test(urlString)) {
+    } else if (!patternAbsolute.test(urlString)) {
       return "relative";
     }
 
@@ -45,7 +44,7 @@
   }
 
   this.onmessage = function(e) {
-    var rawUrls = e.data.body,
+    var rawUrls = e.data.body.links,
       parsedUrls = [];
 
     parsedUrls = rawUrls.map(url => parseUrl(url))
